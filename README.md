@@ -207,4 +207,4 @@ This project is licensed under the MIT License.
 You are free to use, modify, and distribute this software with proper attribution.
 See the LICENSE file for details.
 
-![image_alt](https://github.com/USTAT19/ROS2_My_Robot_Gazebo/blob/4a84a5b5c54011022569291c772d80806f5ee395/gazebo.png)
+![image_alt]()
