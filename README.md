@@ -211,4 +211,4 @@ See the LICENSE file for details.
 ## 🖥️ Gazebo & RViz Visualization
 
 ![image_alt](https://github.com/USTAT19/ROS2_My_Robot_Gazebo/blob/9c7c59b886919c258d7abbd8eb37d126927c09fa/gazebo_sim.png)
-
+![image_alt](https://github.com/USTAT19/ROS2_My_Robot_Gazebo/blob/7f487f0142991b9150974eacd086509ab7237760/rviz2.png)
