@@ -1,33 +1,75 @@
-# ROS2 My Robot Gazebo
+# ROS2 Multi-Sensor Warehouse Robot Simulation
 
-This repository contains a **ROS 2 workspace** for simulating and visualizing a custom robot using  
-**ROS 2 Jazzy Jalisco**, **Gazebo Harmonic**, and **RViz2** on **Ubuntu 24.04**.
+A **ROS2 Jazzy** + **Gazebo Harmonic** robot simulation featuring a 
+multi-sensor setup with **Camera**, **LiDAR**, and **IMU**, deployed 
+in a **warehouse environment** with real-time **RViz2** visualization.
 
-The robot includes a **camera sensor**, which can be visualized directly in **RViz2**.
+---
 
-It is intended for learning, experimentation, and robotics competitions.
+## 🖥️ Simulation Preview
+
+> Add your new Gazebo and RViz2 screenshots here
+
+---
+
+## 🤖 Project Overview
+
+This project simulates a mobile robot with a 2-DOF robotic arm inside 
+a warehouse environment. The robot is equipped with three sensors whose 
+data is visualized live in a custom RViz2 dashboard.
+
+This is an upgrade of the original single-camera robot project, now 
+featuring full sensor fusion visualization.
+
+---
+
+## ✨ Features
+
+- 📷 **Camera Sensor** — Live image feed visualized in RViz2
+- 📡 **LiDAR Sensor** — 360° laser scan at 10Hz, 12m range, visualized as green point cloud
+- 📐 **IMU Sensor** — Orientation and acceleration data at 50Hz
+- 🏭 **Warehouse World** — Enclosed environment with walls, shelves, cardboard boxes and pillars
+- 🖥️ **RViz2 Dashboard** — All three sensors visualized simultaneously
+- 🦾 **Robotic Arm** — 2-DOF arm with position control
+- 🛞 **Differential Drive** — Keyboard teleoperation via /cmd_vel
 
 ---
 
 ## 📂 Repository Structure
-
 ROS2_My_Robot_Gazebo/
 │
 ├── src/
-│ ├── my_robot_description/ # URDF / XACRO robot model
-│ └── my_robot_bringup/ # Launch files for Gazebo + RViz2
+│   ├── my_robot_description/       # URDF / XACRO robot model
+│   │   ├── urdf/
+│   │   │   ├── my_robot.urdf.xacro         # Main robot file
+│   │   │   ├── mobile_base.urdf.xacro      # Base + wheels
+│   │   │   ├── mobile_base_gazebo.urdf.xacro
+│   │   │   ├── arm.urdf.xacro              # Robotic arm
+│   │   │   ├── arm_gazebo.urdf.xacro
+│   │   │   ├── camera.urdf.xacro           # Camera sensor
+│   │   │   ├── lidar.urdf.xacro            # LiDAR sensor (NEW)
+│   │   │   ├── imu.urdf.xacro              # IMU sensor (NEW)
+│   │   │   └── common_properties.urdf.xacro
+│   │   └── rviz/
+│   │       └── urdf_config.rviz            # RViz2 dashboard config
+│   └── my_robot_bringup/           # Launch files
+│       ├── launch/
+│       │   └── my_robot_gazebo.launch.xml
+│       ├── config/
+│       │   └── gazebo_bridge.yaml          # Sensor topic bridges
+│       └── worlds/
+│           └── gazebo_world1.sdf           # Warehouse world
 │
 ├── .gitignore
 ├── README.md
-├── LICENSE
-
+└── LICENSE
 
 ---
 
 ## 🚀 System Requirements
 
 - **Ubuntu 24.04 (Noble Numbat)**
-- **ROS 2 Jazzy Jalisco**
+- **ROS2 Jazzy Jalisco**
 - **Gazebo Harmonic**
 - **RViz2**
 - **colcon**
@@ -37,179 +79,104 @@ ROS2_My_Robot_Gazebo/
 
 ## 🛠️ Installation & Setup
 
-### 1️⃣ Install ROS 2 Jazzy
-Follow the official installation guide:  
+### 1️⃣ Install ROS2 Jazzy
+```bash
+# Follow official guide
 https://docs.ros.org/en/jazzy/Installation.html
+```
 
 ### 2️⃣ Install Gazebo Harmonic
 ```bash
 sudo apt install gz-harmonic
 ```
-3️⃣ Install build tools
+
+### 3️⃣ Install dependencies
 ```bash
 sudo apt install python3-colcon-common-extensions python3-rosdep
+sudo apt install ros-jazzy-ros-gz-bridge ros-jazzy-ros-gz-sim
+sudo apt install ros-jazzy-rviz-imu-plugin
+sudo rosdep init && rosdep update
 ```
-Initialize rosdep (once):
-```bash
-sudo rosdep init
-rosdep update
-```
-🔧 Build Instructions:
 
-1️⃣ Clone the repository
-
+### 4️⃣ Clone and Build
 ```bash
 git clone https://github.com/USTAT19/ROS2_My_Robot_Gazebo.git
 cd ROS2_My_Robot_Gazebo
-```
-2️⃣ Install dependencies
-
-```bash
 rosdep install --from-paths src --ignore-src -r -y
-```
-3️⃣ Build the workspace
-
-```bash
 colcon build
-```
-4️⃣ Source the workspace
-
-```bash
 source install/setup.bash
 ```
-▶️ Run the Simulation
-Launch the robot in Gazebo Harmonic and RViz2:
+
+---
+
+## ▶️ Run the Simulation
 
 ```bash
 ros2 launch my_robot_bringup my_robot_gazebo.launch.xml
 ```
-👁️ RViz2 Visualization
-In RViz2, you can visualize:
-Robot model (RobotModel)
-TF frames (TF)
-Camera image stream (Image)
 
-📷 Camera Sensor
-The robot includes a camera sensor defined in the URDF/XACRO file.
-Typical camera topic:
+---
 
-/camera/image_raw
-#View camera feed in RViz2
-Open RViz2
-Click Add → Camera
-Set the topic to /camera/image_raw
+## 🎮 Teleoperation
 
-🎮 Robot Control (Teleoperation)
-The mobile base of the robot is controlled using keyboard teleoperation via
-the teleop_twist_keyboard package.
-
-🔧 Teleoperation Method
-Package: teleop_twist_keyboard
-Message type: geometry_msgs/Twist
-Command topic:cmd_vel
-
-The velocity commands published on /cmd_vel are consumed by the
-Gazebo Harmonic DiffDrive plugin (gz::sim::systems::DiffDrive) to drive the robot.
-
-▶️ Run Teleop Node
-In a new terminal (after sourcing the workspace):
-
+In a new terminal:
 ```bash
+source install/setup.bash
 ros2 run teleop_twist_keyboard teleop_twist_keyboard
 ```
 
-🦾 Arm Joint Control via ROS 2 Topic
+| Key | Action |
+|-----|--------|
+| `i` | Forward |
+| `,` | Backward |
+| `j` | Turn Left |
+| `l` | Turn Right |
+| `k` | Stop |
 
-In addition to keyboard teleoperation for the mobile base, arm joints are controlled by publishing position commands directly to ROS 2 topics.
-The Gazebo Harmonic JointPositionController plugin listens to command topics of type:
+---
 
-Message type: std_msgs/msg/Float64
+## 📡 Sensor Topics
 
-Control mode: Position control
+| Sensor | Topic | Message Type | Rate |
+|--------|-------|-------------|------|
+| Camera | /camera/image_raw | sensor_msgs/Image | 10Hz |
+| LiDAR | /lidar/scan | sensor_msgs/LaserScan | 5Hz |
+| IMU | /imu/data | sensor_msgs/Imu | 50Hz |
 
-▶️ Publishing Joint Position Commands
+---
 
-You can manually command a joint position using:
+## 🦾 Arm Control
+
 ```bash
+# Joint 0 (forearm)
 ros2 topic pub -1 /joint0/cmd_pos std_msgs/msg/Float64 "{data: 0.8}"
+
+# Joint 1 (hand)
+ros2 topic pub -1 /joint1/cmd_pos std_msgs/msg/Float64 "{data: 0.5}"
 ```
 
-🔧 Explanation
+---
 
-/joint0/cmd_pos → Command topic for the joint
-0.8 → Target joint position (in radians)
--1 → Publishes the message once
+## 🔌 Gazebo Plugins Used
 
-This command sends a desired position to the joint, which is then executed by the
-gz::sim::systems::JointPositionController plugin in Gazebo Harmonic.
+| Plugin | Purpose |
+|--------|---------|
+| gz::sim::systems::DiffDrive | Differential drive for mobile base |
+| gz::sim::systems::JointPositionController | Arm joint control |
+| gz::sim::systems::JointStatePublisher | Joint state publishing |
+| gz::sim::systems::Sensors | Camera and LiDAR rendering |
+| gz::sim::systems::Imu | IMU data publishing |
 
-📌 Notes
-Each controlled joint has its own command topic
-Topic names depend on how the joint controller is configured in the URDF/XACRO
-This method is useful for:
-Testing arm motion
-Debugging controllers
-Simple manipulation experiments (without MoveIt)
+---
 
-🔌 Gazebo Harmonic Plugins Used
-This project uses Gazebo Harmonic system plugins for robot motion control
-and joint state publishing.
+## ⚠️ Notes
 
-🦾 Joint Position Control (Arm)
-Plugin: gz::sim::systems::JointPositionController
+- Always source the workspace before running launch files
+- Gazebo Harmonic plugins must be compatible with ROS2 Jazzy
+- On WSL2, reduce sensor update rates if RViz2 becomes unresponsive
 
-File: gz-sim-joint-position-controller-system
+---
 
-Controlled joints:
-arm_base_forearm_joint
-forearm_hand_joint
+## 📄 License
 
-Control type: Position control (P controller)
-
-Gains:
-arm_base_forearm_joint → p_gain = 5.0
-forearm_hand_joint → p_gain = 3.0
-
-🛞 Differential Drive (Mobile Base)
-Plugin: gz::sim::systems::DiffDrive
-File: gz-sim-diff-drive-system
-
-Controlled joints:
-base_left_wheel_joint
-base_right_wheel_joint
-
-Parameters:
-Wheel separation: 0.45 m
-Wheel radius: 0.1 m
-
-Frames:
-odom
-base_footprint
-
-📡 Joint State Publishing
-Plugin: gz::sim::systems::JointStatePublisher
-
-File: gz-sim-joint-state-publisher-system
-
-Publishes joint states for:
-Arm joints
-Wheel joints
-Joint states are consumed by robot_state_publisher and visualized in RViz2.
-
-⚠️ Notes
-Always source the workspace before running launch files.
-Ensure Gazebo Harmonic plugins are compatible with ROS 2 Jazzy.
-Camera frame IDs and topic names can be changed in the URDF/XACRO.
-RViz2 display configuration can be customized further.
-
-📄 License
-This project is licensed under the MIT License.
-You are free to use, modify, and distribute this software with proper attribution.
-See the LICENSE file for details.
-
-
-## 🖥️ Gazebo & RViz Visualization
-
-![image_alt](https://github.com/USTAT19/ROS2_My_Robot_Gazebo/blob/9c7c59b886919c258d7abbd8eb37d126927c09fa/gazebo_sim.png)
-![image_alt](https://github.com/USTAT19/ROS2_My_Robot_Gazebo/blob/7f487f0142991b9150974eacd086509ab7237760/rviz2.png)
-https://github.com/user-attachments/assets/b6ba21c2-f251-4503-ad8a-e217ab5c8e38
+MIT License — free to use, modify and distribute with attribution.
