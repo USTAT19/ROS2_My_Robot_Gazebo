@@ -13,6 +13,9 @@ in a **warehouse environment** with real-time **RViz2** visualization.
 
 ### Multi-Sensor RViz2 Dashboard
 ![RViz2 Dashboard](rviz2_sensors.png)
+
+### Full Simulation Overview
+![Simulation Overview](simulation_overview.png)
 ---
 
 ## 🤖 Project Overview
