@@ -162,7 +162,7 @@ Visualization Manager:
   Global Options:
     Background Color: 30; 30; 30
     Fixed Frame: base_footprint
-    Frame Rate: 30
+    Frame Rate: 15
   Name: root
   Tools:
     - Class: rviz_default_plugins/Interact

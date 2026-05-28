@@ -8,8 +8,11 @@ in a **warehouse environment** with real-time **RViz2** visualization.
 
 ## 🖥️ Simulation Preview
 
-> Add your new Gazebo and RViz2 screenshots here
+### Warehouse Environment (Gazebo Harmonic)
+![Gazebo Warehouse](gazebo_warehouse.png)
 
+### Multi-Sensor RViz2 Dashboard
+![RViz2 Dashboard](rviz2_sensors.png)
 ---
 
 ## 🤖 Project Overview
