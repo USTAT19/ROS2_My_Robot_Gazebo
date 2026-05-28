@@ -1,0 +1,82 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+    <xacro:property name="imu_size" value="0.05" />
+
+    <link name="imu_link">
+        <visual>
+            <geometry>
+                <box size="${imu_size} ${imu_size} ${imu_size / 2.0}" />
+            </geometry>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <material name="white" />
+        </visual>
+        <collision>
+            <geometry>
+                <box size="${imu_size} ${imu_size} ${imu_size / 2.0}" />
+            </geometry>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+        </collision>
+        <xacro:box_inertia m="0.05" x="${imu_size}" y="${imu_size}" z="${imu_size / 2.0}"
+                           o_xyz="0 0 0" o_rpy="0 0 0" />
+    </link>
+
+    <joint name="base_imu_joint" type="fixed">
+        <parent link="base_link" />
+        <child link="imu_link" />
+        <origin xyz="0 0 ${base_height + imu_size / 4.0}" rpy="0 0 0" />
+    </joint>
+
+    <gazebo reference="imu_link">
+        <sensor name="imu" type="imu">
+            <topic>imu/data</topic>
+            <update_rate>50</update_rate>
+            <always_on>1</always_on>
+            <visualize>true</visualize>
+            <imu>
+                <angular_velocity>
+                    <x>
+                        <noise type="gaussian">
+                            <mean>0.0</mean>
+                            <stddev>0.009</stddev>
+                        </noise>
+                    </x>
+                    <y>
+                        <noise type="gaussian">
+                            <mean>0.0</mean>
+                            <stddev>0.009</stddev>
+                        </noise>
+                    </y>
+                    <z>
+                        <noise type="gaussian">
+                            <mean>0.0</mean>
+                            <stddev>0.009</stddev>
+                        </noise>
+                    </z>
+                </angular_velocity>
+                <linear_acceleration>
+                    <x>
+                        <noise type="gaussian">
+                            <mean>0.0</mean>
+                            <stddev>0.1</stddev>
+                        </noise>
+                    </x>
+                    <y>
+                        <noise type="gaussian">
+                            <mean>0.0</mean>
+                            <stddev>0.1</stddev>
+                        </noise>
+                    </y>
+                    <z>
+                        <noise type="gaussian">
+                            <mean>0.0</mean>
+                            <stddev>0.1</stddev>
+                        </noise>
+                    </z>
+                </linear_acceleration>
+            </imu>
+            <frame_id>imu_link</frame_id>
+        </sensor>
+    </gazebo>
+
+</robot>

@@ -7,6 +7,8 @@
     <xacro:include filename="arm.urdf.xacro" />
     <xacro:include filename="arm_gazebo.urdf.xacro" />
     <xacro:include filename="camera.urdf.xacro" />
+    <xacro:include filename="lidar.urdf.xacro" />
+    <xacro:include filename="imu.urdf.xacro" />
 
     <joint name="mobile_base_arm_joint" type="fixed">
         <parent link="base_link" />
